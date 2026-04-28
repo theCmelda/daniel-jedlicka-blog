@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --palm: #1f6b47;
+  --coral: #ff6b5b;
+  --sun: #ffd15b;
+  --sand: #fff6e5;
+  --cream: #fffaf0;
+  --ink: #1a1a1a;
+}
+
+html, body {
+  background: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+/* Tropical leaf accent — used as background flourish */
+.bg-leaf {
+  background-image: radial-gradient(circle at 90% 10%, rgba(31, 107, 71, 0.06) 0, transparent 35%),
+    radial-gradient(circle at 10% 90%, rgba(255, 107, 91, 0.05) 0, transparent 35%);
+}
+
+/* Article prose styles */
+.prose-bali h2 {
+  @apply font-serif text-3xl md:text-4xl text-palm mt-12 mb-4 leading-tight;
+}
+.prose-bali h3 {
+  @apply font-serif text-2xl md:text-3xl text-ink mt-10 mb-3;
+}
+.prose-bali p {
+  @apply text-lg leading-relaxed text-ink/90 mb-5;
+}
+.prose-bali a {
+  @apply text-coral underline underline-offset-4 hover:text-coralDark;
+}
+.prose-bali strong { @apply font-semibold text-palm; }
+.prose-bali ul { @apply list-disc pl-6 my-5 space-y-2 text-lg; }
+.prose-bali ol { @apply list-decimal pl-6 my-5 space-y-2 text-lg; }
+.prose-bali blockquote {
+  @apply border-l-4 border-coral bg-sand/60 italic px-5 py-3 my-6 rounded-r-lg;
+}
+.prose-bali img { @apply rounded-chunk shadow-chunk my-8 mx-auto; }
+.prose-bali code {
+  @apply bg-sand text-palm px-1.5 py-0.5 rounded text-base;
+}
+
+/* Mobile: tap target ≥ 48px */
+@media (max-width: 760px) {
+  button, a.button { min-height: 48px; }
+}
