@@ -6,21 +6,26 @@ export default function Header({ locale }: { locale: Locale }) {
   const d = dict(locale);
   const altLocale = d.locale_switch_to;
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-cream/80 border-b border-palm/10">
-      <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 backdrop-blur-md bg-cream/85 border-b border-palm/10">
+      <div className="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
         <Link href={`/${locale}`} className="flex items-center gap-3 group">
-          <span className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-palm shadow-chunkSun">
+          <span className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
             <Image
               src="/photos/dj-bali-profile.jpg"
               alt="Daniel Jedlička"
               fill
-              sizes="44px"
+              sizes="48px"
               className="object-cover"
               priority
             />
           </span>
-          <span className="font-serif text-xl md:text-2xl text-palm group-hover:text-coral transition-colors">
-            Daniel Jedlička
+          <span className="flex flex-col leading-tight">
+            <span className="font-serif text-lg md:text-xl font-bold text-ink group-hover:text-palm transition-colors">
+              Daniel Jedlička
+            </span>
+            <span className="text-[10px] md:text-[11px] text-palm/70 uppercase tracking-[0.25em]">
+              {locale === "sk" ? "Peniaze · Biznis · Sloboda" : "Peníze · Byznys · Svoboda"}
+            </span>
           </span>
         </Link>
         <nav className="flex items-center gap-2 md:gap-5 text-sm md:text-base">
@@ -36,7 +41,7 @@ export default function Header({ locale }: { locale: Locale }) {
           </Link>
           <a
             href="https://pdfmetoda.sk/najlepsi-biznis-model"
-            className="button px-4 py-2 rounded-full bg-coral text-white font-semibold shadow-chunk hover:translate-y-0.5 hover:shadow-none transition-all"
+            className="px-4 py-2 rounded-full bg-coral text-white font-semibold hover:bg-coralDark transition-colors"
           >
             {d.cta_main}
           </a>
