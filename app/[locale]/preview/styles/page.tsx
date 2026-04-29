@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { supabase, type Article } from "@/lib/supabase";
+import { supabase, supabaseAdmin, type Article } from "@/lib/supabase";
 import type { Locale } from "@/lib/i18n";
 
 export const revalidate = 30;
@@ -11,7 +11,9 @@ export default async function StylePreviewIndex({
 }: {
   params: { locale: Locale };
 }) {
-  const { data } = await supabase
+  // Drafts are blocked by RLS for the anon key; use service-role client (server-only).
+  const client = supabaseAdmin ?? supabase;
+  const { data } = await client
     .from("articles")
     .select("*")
     .eq("locale", locale)

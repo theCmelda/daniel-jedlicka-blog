@@ -2,14 +2,16 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { supabase, type Article } from "@/lib/supabase";
+import { supabase, supabaseAdmin, type Article } from "@/lib/supabase";
 import { dict, type Locale } from "@/lib/i18n";
 import { markdownToHtml } from "@/lib/markdown";
 
 export const revalidate = 30;
 
 async function getDraft(locale: Locale, slug: string): Promise<Article | null> {
-  const { data } = await supabase
+  // Drafts are blocked by RLS for the anon key; use service-role client (server-only).
+  const client = supabaseAdmin ?? supabase;
+  const { data } = await client
     .from("articles")
     .select("*")
     .eq("locale", locale)
