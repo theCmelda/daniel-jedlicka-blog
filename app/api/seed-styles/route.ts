@@ -24,26 +24,32 @@ const ARTICLES = [
 ];
 
 function parseMd(raw: string): { title: string; body: string } {
-  let body = raw.trim();
-
-  // Strip frontmatter in any of these formats:
-  //   ---\n...\n---\n
-  //   ```yaml\n...\n---\n  (GPT-style)
-  //   ```yaml\n...\n```\n
-  if (body.startsWith("```yaml") || body.startsWith("```yml")) {
-    // GPT often opens with ```yaml then closes with --- (or ```)
-    const closeMatch = body.match(/\n(---|```)\n/);
-    if (closeMatch && closeMatch.index !== undefined) {
-      body = body.slice(closeMatch.index + closeMatch[0].length).trim();
+  // Walk past any leading garbage: code fences (```yaml, ```markdown, ```md, ```yml, ```),
+  // frontmatter delimiters (---), and key:value YAML lines. Stop at first non-frontmatter line.
+  const lines = raw.trim().split("\n");
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i].trim();
+    const isFence = /^```/.test(line);
+    const isDashes = /^---+$/.test(line);
+    const isKeyValue = /^[a-zA-Z_][a-zA-Z0-9_]*\s*:\s/.test(line) && !line.startsWith("#");
+    const isQuotedKeyValue = /^[a-zA-Z_][a-zA-Z0-9_]*\s*:\s*"/.test(line);
+    const isBlank = line === "";
+    if (isFence || isDashes || isKeyValue || isQuotedKeyValue || isBlank) {
+      i++;
+    } else {
+      break;
     }
-  } else if (body.startsWith("---")) {
-    const parts = body.split("---");
-    body = parts.slice(2).join("---").trim();
   }
-
-  const m = body.match(/^#\s+(.+)$/m);
-  const title = m ? m[1].trim() : "Untitled";
-  body = body.replace(/^#\s+.+\n*/m, "").trim();
+  // Pick up the H1
+  let title = "Untitled";
+  if (i < lines.length && /^#\s+/.test(lines[i].trim())) {
+    title = lines[i].trim().replace(/^#\s+/, "");
+    i++;
+  }
+  // Skip any blanks after the title
+  while (i < lines.length && lines[i].trim() === "") i++;
+  const body = lines.slice(i).join("\n").trim();
   return { title, body };
 }
 
